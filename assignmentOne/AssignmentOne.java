@@ -53,8 +53,8 @@ public class AssignmentOne {
                 orderedArtistList.append(list[i][2]);    
             }
         }
-
-        orderedArtistList.displayArtistList();
+        orderedArtistList.insertionSort(orderedArtistList.first);
+        orderedArtistList.displayArtistList(orderedArtistList.first);
 
     }
 
@@ -75,27 +75,23 @@ class Artist {
 
     public String name;
     public Artist next;
-    public static PrintStream ps;
 
     //constructor
     public Artist(String n) throws Exception {
-        ps = new PrintStream("artistList.txt");
         name = n;
-    }
-
-    // print the artist's name
-    public void displayName() throws Exception {
-        ps.println(name);
     }
 }
 
 class ArtistList {
 
-    private Artist first;
+    public Artist first;
+    private Artist sorted;
+    public static PrintStream ps;
 
     //constructor
-    public ArtistList() {
+    public ArtistList() throws Exception {
         first = null;
+        ps = new PrintStream("sortedNames.txt");
     }
 
     public void append(String name) throws Exception {
@@ -105,11 +101,40 @@ class ArtistList {
         first = artist;
     }
 
-    public void displayArtistList() throws Exception {
-        Artist current = first;
-        while (current != null) {
-            current.displayName();
-            current = current.next;
+    public void displayArtistList(Artist head) throws Exception {
+        while(head != null){
+            ps.println(head.name);
+            head = head.next;
+        }
+    }
+    public void insertionSort(Artist a){
+        // Initialize sorted linked list
+        sorted = null;
+        Artist current = a;
+        // traverse the given linked list and insert every element to sorted
+        while(current != null){
+            //store next for next iteration
+            Artist next = current.next;
+            //insert current in sorted linked list
+            sortedInsert(current);
+            //update current
+            current = next;
+        }
+        first = sorted;
+    }
+    public void sortedInsert(Artist newArtist){
+        //special case for head end
+        if(sorted == null || sorted.name.compareTo(newArtist.name)> 0){
+            newArtist.next = sorted;
+            sorted = newArtist;
+        }else{
+            Artist current = sorted;
+            //locate the artist before the point of insertion
+            while(current.next != null && current.next.name.compareTo(newArtist.name)<0){
+                current = current.next;
+            }
+            newArtist.next = current.next;
+            current.next = newArtist;
         }
     }
 }
