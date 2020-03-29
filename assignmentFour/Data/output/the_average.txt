@@ -1,0 +1,4 @@
+The average number of movies per genre is: 10
+Number of movies that are less than average are : 811
+Number of movies that are equale to average are : 9
+Number of movies that are more than average are : 131
